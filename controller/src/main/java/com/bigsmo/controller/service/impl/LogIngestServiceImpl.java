@@ -1,7 +1,6 @@
 package com.bigsmo.controller.service.impl;
 
 import com.bigsmo.controller.service.LogIngestService;
-import com.bigsmo.controller.service.RawLogKafkaPublisher;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;

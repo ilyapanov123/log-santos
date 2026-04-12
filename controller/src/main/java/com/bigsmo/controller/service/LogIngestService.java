@@ -1,7 +1,5 @@
 package com.bigsmo.controller.service;
 
-import com.bigsmo.common.model.NormalizedLogEvent;
-
 import java.util.List;
 
 public interface LogIngestService {
