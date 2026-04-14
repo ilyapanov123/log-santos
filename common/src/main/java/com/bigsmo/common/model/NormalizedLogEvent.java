@@ -1,6 +1,5 @@
 package com.bigsmo.common.model;
 
-import com.bigsmo.common.dto.IncomingLogDto;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -8,7 +7,6 @@ import lombok.NoArgsConstructor;
 
 import java.time.Instant;
 import java.util.Map;
-import java.util.UUID;
 
 @Data
 @Builder
@@ -27,22 +25,6 @@ public class NormalizedLogEvent {
     private String sourceIp;
     private Instant normalizedAt;
 
-    public static NormalizedLogEvent fromDto(IncomingLogDto dto, String sourceIp) {
-        return NormalizedLogEvent.builder()
-                .eventId(UUID.randomUUID().toString())
-                .serviceId(dto.getServiceId())
-                .timestamp(null)
-                .level(dto.getLevel())
-                .message(dto.getMessage())
-                .traceId(dto.getTraceId())
-                .spanId(dto.getSpanId())
-                .attrs(dto.getAttrs())
-                .ingestedAt(Instant.now())
-                .sourceIp(sourceIp)
-                .normalizedAt(null)
-                .build();
-    }
-
     public Map<String, Object> toMap() {
         return Map.of(
                 "event_id", eventId,
@@ -50,8 +32,8 @@ public class NormalizedLogEvent {
                 "@timestamp", timestamp,
                 "level", level,
                 "message", message,
-                "trace_id", traceId,
-                "span_id", spanId,
+                "trace_id", traceId != null ? traceId : "",
+                "span_id", spanId != null ? spanId : "",
                 "attrs", attrs != null ? attrs : Map.of(),
                 "ingested_at", ingestedAt
         );
