@@ -13,7 +13,6 @@ import java.time.Instant;
 @AllArgsConstructor
 public class LogMetricEvent {
     private String metricName;
-    private String serviceId;
     private long value;
     private Instant windowStart;
     private Instant windowEnd;

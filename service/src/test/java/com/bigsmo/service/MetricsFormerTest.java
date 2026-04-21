@@ -29,11 +29,11 @@ class MetricsFormerTest {
 
         List<LogMetricEvent> metrics = metricsFormer.formMetrics(events, start, end);
 
-        assertEquals(5, findValue(metrics, "auth", "logs_total"));
-        assertEquals(2, findValue(metrics, "auth", "logs_info_total"));
-        assertEquals(1, findValue(metrics, "auth", "logs_warn_total"));
-        assertEquals(1, findValue(metrics, "auth", "logs_error_total"));
-        assertEquals(1, findValue(metrics, "auth", "logs_debug_total"));
+        assertEquals(5, findValue(metrics, "logs_total"));
+        assertEquals(2, findValue(metrics, "logs_info_total"));
+        assertEquals(1, findValue(metrics, "logs_warn_total"));
+        assertEquals(1, findValue(metrics, "logs_error_total"));
+        assertEquals(1, findValue(metrics, "logs_debug_total"));
     }
 
     @Test
@@ -50,19 +50,18 @@ class MetricsFormerTest {
 
         List<LogMetricEvent> metrics = metricsFormer.formMetrics(events, start, end);
 
-        assertEquals(2, findValue(metrics, "auth", "logs_total"));
-        assertEquals(1, findValue(metrics, "auth", "logs_info_total"));
-        assertEquals(1, findValue(metrics, "auth", "logs_warn_total"));
-        assertEquals(0, findValue(metrics, "auth", "logs_error_total"));
+        assertEquals(2, findValue(metrics, "logs_total"));
+        assertEquals(1, findValue(metrics, "logs_info_total"));
+        assertEquals(1, findValue(metrics, "logs_warn_total"));
+        assertEquals(0, findValue(metrics, "logs_error_total"));
 
-        assertEquals(2, findValue(metrics, "billing", "logs_total"));
-        assertEquals(2, findValue(metrics, "billing", "logs_error_total"));
-        assertEquals(0, findValue(metrics, "billing", "logs_warn_total"));
+        assertEquals(2, findValue(metrics, "logs_total"));
+        assertEquals(2, findValue(metrics, "logs_error_total"));
+        assertEquals(0, findValue(metrics, "logs_warn_total"));
     }
 
-    private long findValue(List<LogMetricEvent> metrics, String serviceId, String metricName) {
+    private long findValue(List<LogMetricEvent> metrics, String metricName) {
         return metrics.stream()
-                .filter(m -> serviceId.equals(m.getServiceId()))
                 .filter(m -> metricName.equals(m.getMetricName()))
                 .map(LogMetricEvent::getValue)
                 .findFirst()

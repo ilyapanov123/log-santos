@@ -41,7 +41,7 @@ public class KafkaPublisherService implements KafkaPublisher<Object> {
         for (LogMetricEvent metric : metrics) {
             log.debug("Publishing metric to {}: name={}", 
                     topics.getMetrics(), metric.getMetricName());
-            kafkaTemplate.send(topics.getMetrics(), metric.getServiceId(), metric);
+            kafkaTemplate.send(topics.getMetrics(), metric);
         }
     }
 }

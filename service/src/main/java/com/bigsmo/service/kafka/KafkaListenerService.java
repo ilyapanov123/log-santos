@@ -34,10 +34,10 @@ public class KafkaListenerService {
 
             NormalizedLogEvent normalized = logNormalizer.normalize(incoming, "kafka");
 
-            // 1. Publish the normalized log IMMEDIATELY (unchanged behavior)
+            // 1. Publish the normalized log IMMEDIATELY
             publisher.publishNormalizedLog(normalized);
 
-            // 2. Queue it for later batched metrics (NEW)
+            // 2. Queue it for later batched metrics
             metricsBatcher.addToBatch(normalized);
 
             log.info("Processed and queued for metrics: service={}, level={}",
