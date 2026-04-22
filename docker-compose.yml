@@ -10,28 +10,27 @@ services:
       - "8080:8080"
     environment:
       - SPRING_PROFILES_ACTIVE=docker
-      - KAFKA_BOOTSTRAP_SERVERS=kafka-ls:9092
-    restart: unless-stopped
+      - KAFKA_BOOTSTRAP_SERVERS=kafka:9092
     networks:
       - log-santos-net
     depends_on:
-     - kafka
+      - kafka
 
   service:
+    container_name: service-ls
     build:
       context: .
       dockerfile: Dockerfile
       args:
         MODULE: service
-    container_name: service-ls
     environment:
       - SPRING_PROFILES_ACTIVE=docker
-      - KAFKA_BOOTSTRAP_SERVERS=kafka-ls:9092
-    restart: unless-stopped
+      - KAFKA_BOOTSTRAP_SERVERS=kafka:9092
     networks:
       - log-santos-net
     depends_on:
       - kafka
+      - clickhouse
 
   kafka:
     container_name: kafka-ls
@@ -47,15 +46,30 @@ services:
       KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: CONTROLLER:PLAINTEXT,PLAINTEXT:PLAINTEXT
       KAFKA_CONTROLLER_QUORUM_VOTERS: 1@localhost:9093
       KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
-      KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR: 1
       KAFKA_AUTO_CREATE_TOPICS_ENABLE: true
     networks:
       - log-santos-net
     volumes:
       - kafka_data:/var/lib/kafka/data
 
+  clickhouse:
+    container_name: clickhouse-ls
+    image: clickhouse/clickhouse-server:latest
+    ports:
+      - "8123:8123"
+      - "9000:9000"
+    environment:
+      CLICKHOUSE_USER: default
+      CLICKHOUSE_PASSWORD: 123
+      CLICKHOUSE_DB: logsantos
+    volumes:
+      - clickhouse_data:/var/lib/clickhouse
+    networks:
+      - log-santos-net
+
 volumes:
   kafka_data:
+  clickhouse_data:
 
 networks:
   log-santos-net:
