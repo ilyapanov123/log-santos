@@ -67,9 +67,31 @@ services:
     networks:
       - log-santos-net
 
+ grafana:
+    image: grafana/grafana:11.0.0
+    container_name: log-santos-grafana
+    restart: unless-stopped
+    ports:
+      - "3000:3000"
+    environment:
+      GF_SECURITY_ADMIN_USER: admin
+      GF_SECURITY_ADMIN_PASSWORD: admin
+      GF_USERS_ALLOW_SIGN_UP: "false"
+      GF_INSTALL_PLUGINS: "grafana-clickhouse-datasource"
+    volumes:
+      - grafana_data:/var/lib/grafana
+      - ./grafana/provisioning:/etc/grafana/provisioning
+      - ./grafana/dashboards:/var/lib/grafana/dashboards
+    depends_on:
+      - kafka
+      - clickhouse
+    networks:
+      - log-santos-net
+
 volumes:
   kafka_data:
   clickhouse_data:
+  grafana_data:
 
 networks:
   log-santos-net:
